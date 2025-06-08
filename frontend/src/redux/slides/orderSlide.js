@@ -4,6 +4,7 @@ const initialState = {
   orderItems: [
 
   ],
+  orderItemsSelected: [],
   shippingAddress: {
 
   },
@@ -36,27 +37,49 @@ export const orderSlice = createSlice({
         increaseAmount: (state, action) => {
             const {idProduct} = action.payload
             const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
+            const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
             itemOrder.amount++
+            if(itemOrderSelected){
+                itemOrderSelected.amount++
+            }
         },
         decreaseAmount: (state, action) => {
             const {idProduct} = action.payload
             const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct)
+            const itemOrderSelected = state?.orderItemsSelected?.find((item) => item?.product === idProduct)
             itemOrder.amount--
+            if(itemOrderSelected){
+                itemOrderSelected.amount--
+            }
         },
         removeOrderProduct: (state, action) => {
             const {idProduct} = action.payload
             const itemOrder = state?.orderItems?.filter((item) => item?.product !== idProduct)
+            const itemOrderSelected = state?.orderItemsSelected?.filter((item) => item?.product !== idProduct)
             state.orderItems = itemOrder
+            state.orderItemsSelected = itemOrderSelected  
         },
         removeAllOrderProduct: (state, action) => {
             const {listChecked} = action.payload
             const itemOrders = state?.orderItems?.filter((item) => !listChecked.includes(item.product))
+            const itemOrderSelected = state?.orderItemsSelected?.filter((item) => !listChecked.includes(item.product))
             state.orderItems = itemOrders
+            state.orderItemsSelected = itemOrderSelected
         },
+        selectedOrder: (state, action) => {
+            const {listChecked} = action.payload
+            const orderSelected = []
+            state.orderItems.forEach((order) => {
+                if(listChecked.includes(order.product)){
+                    orderSelected.push(order)
+                }
+            })
+            state.orderItemsSelected = orderSelected
+        }
     },
 })
 
 
-export const { addOrderProduct, increaseAmount, decreaseAmount, removeOrderProduct, removeAllOrderProduct } = orderSlice.actions
+export const { addOrderProduct, increaseAmount, decreaseAmount, removeOrderProduct, removeAllOrderProduct, selectedOrder } = orderSlice.actions
 
 export default orderSlice.reducer

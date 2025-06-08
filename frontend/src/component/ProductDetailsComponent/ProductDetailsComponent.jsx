@@ -11,6 +11,7 @@ import Loading1 from "../LoadingComponent/Loading1";
 import {useDispatch, useSelector} from 'react-redux'
 import {useLocation, useNavigate} from 'react-router-dom'
 import { addOrderProduct } from "../../redux/slides/orderSlide";
+import { convertPrice } from "../../untils";
 
 const ProductDetailsComponent = ({idProduct}) => {
     const [numProduct, setNumProduct] = useState(1)
@@ -100,7 +101,7 @@ const ProductDetailsComponent = ({idProduct}) => {
                         <WrapperStyleTextSell> | Đã bán 1000+</WrapperStyleTextSell>
                     </div>
                     <WrapperPriceProduct>
-                        <WrapperPriceText> {productDetails?.price} </WrapperPriceText>
+                        <WrapperPriceText> {convertPrice(productDetails?.price)} </WrapperPriceText>
                     </WrapperPriceProduct>
 
                     <WrapperAddressProduct>

@@ -63,7 +63,9 @@ export const WrapperTotal = styled.div`
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-
+    background: #fff;
+    padding: 17px 20px;
+    margin-top: 10px;
 `
 
 export const WrapperInputNumber = styled(InputNumber)`

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from './redux/slides/userSlide';
 import Loading1 from './component/LoadingComponent/Loading1';
 import { isPending } from '@reduxjs/toolkit';
+import 'antd/dist/reset.css';
 
 function App() {
   const dispatch = useDispatch()
@@ -56,7 +57,7 @@ function App() {
 
   return (
     <div>
-      <Loading1 isLoading={isLoading}>
+      <Loading1 isPending={isLoading}>
         <Router>
           <Routes>
             {routes.map((routes) => {
