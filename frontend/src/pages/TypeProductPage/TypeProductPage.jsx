@@ -57,7 +57,7 @@ const TypeProductPage = () => {
                                     if(searchDebounce === ''){
                                         return pro
                                     }
-                                    else if(pro?.name?.toLowerCase()?.includes(searchDebounce.toLowerCase())){
+                                    else if(pro?.name?.toLowerCase()?.includes(searchDebounce?.toLowerCase())){
                                         return pro
                                     }
                                 })?.map((product) => {
@@ -78,7 +78,7 @@ const TypeProductPage = () => {
                                     )
                                 })}
                             </WrapperProducts>
-                            <Pagination defaultCurrent={panigate.page + 1} total={panigate?.total} onChange={onChange} style={{justifyContent:'center', marginTop:'10px'}} />
+                            <Pagination defaultCurrent={panigate.page + 1} total={panigate?.total} onChange={onChange} style={{justifyContent:'center', marginTop:'10px', textAlign:'center'}} />
                         </Col>
                     </Row>
                 </div>

@@ -31,13 +31,12 @@ const ProductDetailsComponent = ({idProduct}) => {
     }
 
     const handleChangeCount = (type) => {
-        if (type === 'increase'){
-            setNumProduct(numProduct + 1)
-        }
-        else {
-            setNumProduct(numProduct - 1)
-        }
+    if (type === 'increase') {
+        setNumProduct(numProduct + 1);
+    } else {
+        setNumProduct(prev => Math.max(1, prev - 1));
     }
+};
 
     const handleAddOrderProduct = () => {
         if(!user?.id){

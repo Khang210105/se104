@@ -17,7 +17,6 @@ export const getProductType = async (type, page, limit) => {
         const res = await axios.get(`http://localhost:3001/api/product/get-all?filter=type&filter=${type}&limit=${limit}&page=${page}`)
         return res.data
     }
-    
 }
 
 export const createProduct = async (data) => {

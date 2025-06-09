@@ -1,23 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  orderItems: [
-
-  ],
-  orderItemsSelected: [],
-  shippingAddress: {
-
-  },
-  paymentMethod: '',
-  itemsPrice: 0,
-  shippingPrice: 0,
-  taxPrice: 0,
-  totalPrice: 0,
-  user: '',
-  isPaid: false,
-  paidAt: '',
-  isDelivered: false,
-  deliveredAt: '',
+    orderItems: [],
+    orderItemsSelected: [],
+    shippingAddress: {},
+    paymentMethod: '',
+    itemsPrice: 0,
+    shippingPrice: 0,
+    taxPrice: 0,
+    totalPrice: 0,
+    user: '',
+    isPaid: false,
+    paidAt: '',
+    isDelivered: false,
+    deliveredAt: '',
 }
 
 export const orderSlice = createSlice({

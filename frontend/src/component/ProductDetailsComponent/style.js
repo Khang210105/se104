@@ -63,18 +63,28 @@ export const WrapperQualityProduct = styled.div`
     display: flex;
     gap: 4px;
     align-items: center;
-    width: 100px;
+    width: 120px;
     border: 1px solid #ccc;
     border-radius: 4px;
 `
 
 export const WrapperInputNumber = styled(InputNumber)`
-    &.ant-input-number.ant-input-number-sm {
-        width: 40px;
-        border-top: none;
-        border-bottom: none;
-        .ant-input-number-handler-wrap {
-            display: none !important;
-        }
-    };
-`
+  &.ant-input-number.ant-input-number-sm {
+    min-width: 40px;
+    max-width: 80px;
+    width: auto;
+
+    border-top: none;
+    border-bottom: none;
+
+    .ant-input-number-handler-wrap {
+      display: none !important;
+    }
+
+    input {
+      text-align: center;
+      padding: 0 6px;
+      width: 100%; /* để input bên trong co giãn đúng theo container */
+    }
+  }
+`;

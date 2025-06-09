@@ -10,7 +10,7 @@ import {useMutation} from '@tanstack/react-query';
 import axios from "axios";
 import * as UserService from '../../services/UserService';
 import { useMutationHook } from "../../hooks/useMutationHook";
-import Loading from "../../component/LoadingComponent/Loading";
+import Loading1 from "../../component/LoadingComponent/Loading1";
 import ButtonSign from "../../component/ButtonSign/ButtonSign";
 import * as message from '../../component/Message/Message';
 import { jwtDecode } from 'jwt-decode';
@@ -24,6 +24,7 @@ const SignInPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
     const handleNavigateSignUp = () => {
         navigate('/sign-up')
     }
@@ -104,7 +105,7 @@ const SignInPage = () => {
                         onChange={handleOnchangePassword} />
                     </div>
                     {data?.status === 'ERROR' && <span style={{color:'red'}}>{data?.message}</span> }
-                    <Loading isPending={mutation.isPending}>
+                    <Loading1 isPending={mutation.isLoading}>
                         <ButtonSign
                             disabled={!email.length || !password.length}
                             onClick={handleSignIn}
@@ -120,7 +121,7 @@ const SignInPage = () => {
                             textButton={'Đăng nhập'}
                             styleTextButton={{color: '#fff', fontSize: '15px', fontWeight: '700'}}>
                         </ButtonSign>
-                    </Loading>
+                    </Loading1>
                     <p> <WrapperTextLight>  Quên mật khẩu ? </WrapperTextLight></p>
                     <p style={{fontSize:'13px'}}> Bạn chưa có tài khoản ? <WrapperTextLight onClick={handleNavigateSignUp } style={{cursor:'pointer'}}> Tạo tài khoản </WrapperTextLight> </p> 
                     </WrapperContainerLeft>

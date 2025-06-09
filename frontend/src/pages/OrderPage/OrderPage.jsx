@@ -12,10 +12,13 @@ import ModalComponent from '../../component/ModalComponent/ModalComponent'
 import InputComponent from '../../component/InputComponent/InputComponent'
 import { useMutationHook } from '../../hooks/useMutationHook'
 import * as UserService from '../../services/UserService';
-import * as message from '../../component/Message/Message'
 import { updateUser } from '../../redux/slides/userSlide'
+import { useNavigate } from 'react-router-dom'
+import { message } from "antd";
 
 const OrderPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate()
     const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
     const [stateUserDetails, setStateUserDetails] = useState({
         name: '',
@@ -48,6 +51,7 @@ const OrderPage = () => {
 
     useEffect(() => {
         if(isOpenModalUpdateInfo){
+            // console.log('user in modal:', user)
             setStateUserDetails({
                 city: user?.city,
                 name: user?.name,
@@ -56,6 +60,10 @@ const OrderPage = () => {
             })
         }
     }, [isOpenModalUpdateInfo])
+
+    const handleChangeAddress = () => {
+        setIsOpenModalUpdateInfo(true)
+    }
 
     const priceMemo = useMemo(() => {
         const result = order?.orderItemsSelected?.reduce((total, cur) => {
@@ -124,12 +132,15 @@ const OrderPage = () => {
     }
 
     const handleAddCard = () => {
-        console.log('order', order);
-        if(order?.orderItemsSelected?.length === 0){
-            message.error('Vui lòng chọn sản phẩm')
+        // console.log('order', order);
+        if(!order?.orderItemsSelected?.length){
+            messageApi.error('Vui lòng chọn sản phẩm')
         }
         else if(!user?.phone || !user?.address || !user?.name || !user?.city){
             setIsOpenModalUpdateInfo(true)
+        }
+        else{
+            navigate('/payment')
         }
     }
 
@@ -182,6 +193,7 @@ const OrderPage = () => {
 
     return (
         <div style={{background: '#f5f5fa', width: '100%', height: '100vh'}}>
+            {contextHolder}
             <div style={{width: '1270px', height: '100%', margin: '0 auto'}}>
                 <h3>Giỏ hàng</h3>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -217,7 +229,7 @@ const OrderPage = () => {
                                             <span>
                                                 <span style={{fontSize:'13px', color:'#242424'}}> {convertPrice(order?.price)} </span>
                                                 {/* <WrapperPriceDiscount>
-                                                    {order?.amount}
+                                                    {}
                                                 </WrapperPriceDiscount> */}
                                             </span>
                                             <WrapperCountOrder>
@@ -239,6 +251,13 @@ const OrderPage = () => {
                     </WrapperLeft>
                     <WrapperRight>
                         <div style={{width:'100%'}}>
+                            <WrapperInfo>
+                                <div>
+                                    <span> Địa chỉ: </span>
+                                    <span style={{fontWeight: 'bold'}}> {`${user?.address} ${user?.city}`} </span>
+                                    <span onClick={handleChangeAddress} style={{color: 'blue', cursor: 'pointer'}}> Thay đổi địa chỉ </span>
+                                </div>
+                            </WrapperInfo>
                             <WrapperInfo>
                                 <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                                     <span style={{fontSize:'14px'}}>Tạm tính</span>
@@ -289,7 +308,7 @@ const OrderPage = () => {
                 onCancel={handleCancelUpdate}
                 onOk = {handleUpdateInfoUser}
             >
-                <Loading1 isPending={isPending}>
+                <Loading1 isPending={mutationUpdate.isPending}>
                     <Form
                             name="basic"
                             labelCol={{ span: 4 }}

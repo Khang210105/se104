@@ -30,7 +30,7 @@ const AdminProduct = ()=> {
     const [searchedColumn, setSearchedColumn] = useState('');
 
     const [stateProduct, setStateProduct] = useState({
-        name:'',
+        name: '',
         price:'',
         description: '',
         rating:'',
@@ -575,9 +575,17 @@ const AdminProduct = ()=> {
                     <Form.Item
                         label="Price"
                         name="price"
-                        rules={[{ required: true, message: 'Please input Price of product!' }]}
+                        rules={[{ required: true, message: 'Please input price of product!' }]}
                     >
                     <InputComponent value={stateProduct.price} onChange={handleOnchange} name='price' />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Description"
+                        name="description"
+                        rules={[{ required: true, message: 'Please input description of product!' }]}
+                    >
+                    <InputComponent value={stateProduct.price} onChange={handleOnchange} name='description' />
                     </Form.Item>
 
                     <Form.Item

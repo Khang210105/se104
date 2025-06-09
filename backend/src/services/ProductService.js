@@ -30,7 +30,6 @@ const createProduct = (newProduct) => {
                     data: createProduct
                 })
             }
-            resolve({})
         } catch (e) {
             reject(e)
         }
