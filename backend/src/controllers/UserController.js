@@ -42,18 +42,18 @@ const loginUser = async (req, res) => {
         const isCheckEmail = reg.test(email)
         if (!email || !password ){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The input is required',
             })
         }
         else if (!isCheckEmail){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The input is email',
             })
         }
         const response = await UserService.loginUser(req.body)
-        console.log('repsponse', response);
+        //console.log('repsponse', response);
         const {refresh_token, ...newResponse} = response
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
@@ -75,7 +75,7 @@ const updateUser = async (req, res) => {
 
         if (!userId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The user id is required'
             })
         }
@@ -94,7 +94,7 @@ const deleteUser = async (req, res) => {
         const token = req.headers
         if (!userId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The user id is required'
             })
         }
@@ -112,7 +112,7 @@ const deleteMany = async (req, res) => {
         const ids = req.body.ids
         if (!ids){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The ids is required'
             })
         }
@@ -141,7 +141,7 @@ const getDetailsUser = async (req, res) => {
         const userId = req.params.id
         if (!userId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The user id is required'
             })
         }
@@ -160,7 +160,7 @@ const refreshToken = async (req, res) => {
         const token = req.cookies.refresh_token
         if (!token){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The token is required'
             })
         }

@@ -10,6 +10,7 @@ const OrderSuccess = () => {
     const order = useSelector((state) => state.order)
     const location  = useLocation()
     const {state} = location
+    console.log('state.order', state.order);
     return (
         <div style={{background: '#f5f5fa', width: '100%', height: '100vh'}}>
             <Loading1 isPending={false}>
@@ -21,7 +22,7 @@ const OrderSuccess = () => {
                                 <div>
                                     <Lable> Phương thức giao hàng </Lable>
                                     <WrapperValue>
-                                        <span style={{color:'#ea8500', fontWeight: 'bold'}}> {orderContant.delivery[state?.delivery]} </span>
+                                        <span style={{color:'#ea8500', fontWeight: 'bold'}}> {orderContant.delivery[state?.delivery]} </span> GHTK
                                     </WrapperValue>
                                 </div>
                             </WrapperInfo>
@@ -33,11 +34,13 @@ const OrderSuccess = () => {
                                     </WrapperValue>
                                 </div>
                             </WrapperInfo>
-                            <WrapperItemOrderInfo>
-                                {state.order?.map((order) => {
+                            <WrapperInfo>
+                                <WrapperItemOrderInfo>
+                                {state.orders?.map((order) => {
+                                    console.log('state', order);
                                     return(
                                         <WrapperItemOrder>
-                                        <div style={{width: '390px', display: 'flex', alignItems:'center', gap: 4}}>
+                                        <div style={{width: '500px', display: 'flex', alignItems:'center', gap: 4}}>
                                             <img src={order?.image} alt="" style={{width: '77px', height: '79px', objectFit: 'cover'}} />
                                             <div style={{
                                                 width: 260,
@@ -47,18 +50,25 @@ const OrderSuccess = () => {
                                                 fontSize:'18px'
                                             }}>{order?.name}</div>
                                         </div>
-                                        <div style={{flex: 1, display:'flex', alignItems:'center'}}>
+                                        <div style={{flex: 1, display:'flex', alignItems:'center', gap:'10px'}}>
                                             <span>
                                                 <span style={{fontSize:'13px', color:'#242424'}}> Giá tiền {convertPrice(order?.price)} </span>
                                             </span>
                                             <span>
-                                                <span style={{fontSize:'13px', color:'#242424'}}> Số lượng {convertPrice(order?.amount)} </span>
+                                                <span style={{fontSize:'13px', color:'#242424'}}> Số lượng {order?.amount} </span>
+                                            </span>
+                                            <span>
+                                                <span style={{fontSize:'13px', color:'#242424'}}> Giảm giá {convertPrice((order?.price * order?.amount) * order?.discount / 100)} </span>
                                             </span>
                                         </div>
                                         </WrapperItemOrder>
-                                    )
-                                })}
-                            </WrapperItemOrderInfo>
+                                        )
+                                    })}
+                                </WrapperItemOrderInfo>
+                                <div>
+                                    <span style={{fontSize:'13px', color:'red', fontWeight: 'bold'}}> Tổng tiền: {convertPrice(state?.totalPrice)} </span>
+                                </div>
+                            </WrapperInfo>
                         </WrapperContainer>
                     </div>
                 </div>

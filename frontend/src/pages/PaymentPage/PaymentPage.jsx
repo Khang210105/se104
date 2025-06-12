@@ -13,11 +13,13 @@ import InputComponent from '../../component/InputComponent/InputComponent'
 import { useMutationHook } from '../../hooks/useMutationHook'
 import * as UserService from '../../services/UserService';
 import * as OrderService from '../../services/OrderService'
-import * as message from '../../component/Message/Message'
 import { updateUser } from '../../redux/slides/userSlide'
 import { useNavigate } from 'react-router-dom'
+import { message } from 'antd';
 
 const PaymentPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const [payment, setPayment] = useState('later_money')
     const [delivery, setDelivery] = useState('fast')
     const [isOpenModalUpdateInfo, setIsOpenModalUpdateInfo] = useState(false)
@@ -62,27 +64,25 @@ const PaymentPage = () => {
     }
 
     const priceMemo = useMemo(() => {
-        const result = order?.orderItemsSelected?.reduce((total, cur) => {
-            return total + ((cur.price * cur.amount))
-        }, 0)
-        return result
-    }, [order])
-
+            const result = order?.orderItemsSelected?.reduce((total, cur) => {
+                return total + ((cur.price * cur.amount))
+            }, 0)
+            return result
+        }, [order])
+    
     const priceDiscountMemo = useMemo(() => {
         const result = order?.orderItemsSelected?.reduce((total, cur) => {
-            return total + ((cur.discount * cur.amount))
-        }, 0)
-        if(Number(result)){
-            return result
-        }
-        return 0
-    }, [order])
+            const discountPercent = cur.discount ?? 0;
+            return total + ((cur.price * cur.amount * discountPercent) / 100);
+        }, 0);
+        return result || 0;
+    }, [order]);
 
     const priceShipMemo = useMemo(() => {
-        if(priceMemo > 100000){
+        if(priceMemo >= 200000 && priceMemo < 500000){
             return 10000
         }
-        else if(priceMemo === 0){
+        else if(priceMemo >= 500000 || order?.orderItemsSelected?.length === 0){
             return 0
         }
         else {
@@ -90,9 +90,9 @@ const PaymentPage = () => {
         }
     }, [priceMemo])
 
-    const totalPrice = useMemo(() => {
-        return Number(priceMemo) - Number(priceDiscountMemo) + Number(priceShipMemo)
-    }, [priceMemo, priceDiscountMemo, priceShipMemo])
+    const totalPriceMemo = useMemo(() => {
+        return Number(priceMemo) + Number(priceShipMemo) - Number(priceDiscountMemo);
+    }, [priceMemo, priceDiscountMemo, priceShipMemo]);
 
     const handleRemoveAllOrder = () => {
         if(listChecked?.length > 1){
@@ -113,17 +113,17 @@ const PaymentPage = () => {
         ){
             mutationAddOrder.mutate(
             { 
-                    token: user?.access_token, 
-                    orderItems: order?.orderItemsSelected, 
-                    fullName: user?.name, 
-                    address: user?.address, 
-                    phone: user?.phone, 
-                    city: user?.city,
-                    paymentMethod: user?.payment,
-                    itemsPrice: priceMemo,
-                    shippingPrice: priceShipMemo,
-                    totalPrice: totalPrice,
-                    user: user?.id,
+                token: user?.access_token, 
+                orderItems: order?.orderItemsSelected, 
+                fullName: user?.name, 
+                address: user?.address, 
+                phone: user?.phone, 
+                city: user?.city,
+                paymentMethod: payment,
+                itemsPrice: priceMemo,
+                shippingPrice: priceShipMemo,
+                totalPrice: totalPriceMemo,
+                user: user?.id,
             })
         }
     }
@@ -155,12 +155,12 @@ const PaymentPage = () => {
     )
 
     const mutationAddOrder = useMutationHook(
-        (data) => {
+        async (data) => {
             const {
                 token, 
                 ...rests} = data
-            const res = OrderService.createOrder( 
-                token, {...rests})
+            const res = await OrderService.createOrder( 
+                {...rests}, token)
             return res
         },
     )
@@ -172,18 +172,23 @@ const PaymentPage = () => {
 
     useEffect(() => {
         if(isSuccess && dataAddOrder?.status === 'OK') {
-            message.success('Đặt hàng thành công')
+            const arrayOrdered = []
+            order?.orderItemsSelected?.forEach(element => {
+                arrayOrdered.push(element.product)
+            })
+            dispatch(removeAllOrderProduct({listChecked: arrayOrdered}))
+            messageApi.success("Thành công")
             navigate('/orderSuccess', {
                 state: {
                     delivery,
                     payment,
                     orders: order?.orderItemsSelected,
-                    totalPrice: totalPrice
+                    totalPrice: totalPriceMemo,
                 }
             })
         }
         else if (isError) {
-            message.error()
+            messageApi.error('Lỗi')
         }
     }, [isSuccess, isError])
     
@@ -216,6 +221,7 @@ const PaymentPage = () => {
 
     return (
         <div style={{background: '#f5f5fa', width: '100%', height: '100vh'}}>
+            {contextHolder}
             <Loading1 isPending={isPendingAddOrder}>
                 <div style={{width: '1270px', height: '100%', margin: '0 auto'}}>
                     <h3> Thanh toán </h3>
@@ -256,7 +262,7 @@ const PaymentPage = () => {
                                     </div>
                                     <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                                         <span style={{fontSize:'14px',marginTop:'5px'}}>Giảm giá</span>
-                                        <span style={{color:'#000', fontSize:'14px', fontWeight:'bold'}}> {`${priceDiscountMemo} %`} </span>
+                                        <span style={{color:'#000', fontSize:'14px', fontWeight:'bold'}}>- {convertPrice(priceDiscountMemo)} </span>
                                     </div>
                                     {/* <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                                         <span>Thuế</span>
@@ -270,7 +276,7 @@ const PaymentPage = () => {
                                 <WrapperTotal>
                                     <span style={{fontSize:'20px'}}>Tổng tiền</span>
                                     <span style={{display:'flex', flexDirection:'column'}}>
-                                        <span style={{color:'rgb(254, 56, 52)', fontSize:'24px', fontWeight:'bold'}} > {convertPrice(totalPrice)} </span>
+                                        <span style={{color:'rgb(254, 56, 52)', fontSize:'24px', fontWeight:'bold'}} > {convertPrice(totalPriceMemo)} </span>
                                         <span style={{color:'#000', fontSize:'11px'}} > (Đã bao gồm VAT nếu có) </span>
                                     </span>
                                 </WrapperTotal>

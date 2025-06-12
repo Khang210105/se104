@@ -18,13 +18,14 @@ const CardComponent = (props) => {
 		//bodyStyle={{ padding: '10px' }}
 		cover = {<img alt='example' src={image} />}
 		onClick={() => handleDetailsProduct(id)}
+		disabled={countInStock===0}
 	>
 		<StyleNameProduct style={{fontSize:'16px'}}>{name}</StyleNameProduct>
 		<WrapperReportText>
 			<span style={{ marginRight: '4px' }}>
 				<span>{rating}</span> <StarFilled style={{ fontSize: '12px', color: 'rgb(253, 216, 54)' }} />
 			</span>
-			<WrapperStyleTextSell> | Đã bán {selled || 1000}+</WrapperStyleTextSell>
+			<WrapperStyleTextSell> | Đã bán {selled || 0}</WrapperStyleTextSell>
 		</WrapperReportText>
 		<WrapperPriceText>
 			<span style={{ marginRight: '8px' }}> {convertPrice(price)} </span>

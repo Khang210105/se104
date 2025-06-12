@@ -9,25 +9,25 @@ const createProduct = (newProduct) => {
             })
             if(checkProduct !== null){
                 resolve({
-                    status: 'ERROR',
+                    status: 'Error',
                     message: 'The name of product is already',
                 })
             }
-            const createProduct = await Product.create({
+            const newProduct = await Product.create({
                 name, 
                 image, 
-                type, 
-                price, 
-                countInStock, 
+                type,  
+                countInStock: Number(countInStock),
+                price,
                 rating, 
                 description,
-                discount,
+                discount: Number(discount),
             })
-            if(createProduct){
+            if(newProduct){
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
-                    data: createProduct
+                    data: newProduct
                 })
             }
         } catch (e) {

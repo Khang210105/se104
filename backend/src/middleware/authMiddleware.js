@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
         if(err){
             return res.status(404).json({
                 message: 'The authentication',
-                status: 'ERROR'
+                status: 'Error'
             })
         }
         if (user?.isAdmin){
@@ -18,7 +18,7 @@ const authMiddleware = (req, res, next) => {
         else{
             return res.status(404).json({
                 message: 'The authentication',
-                status: 'ERROR'
+                status: 'Error'
             })
         }
     });
@@ -31,7 +31,7 @@ const authUserMiddleware = (req, res, next) => {
         if (err){
             return res.status(404).json({
                 message: 'The authentication',
-                status: 'ERROR'
+                status: 'Error'
             })
         }
         if (user?.isAdmin || user?.id === userID){
@@ -40,7 +40,7 @@ const authUserMiddleware = (req, res, next) => {
         else {
             return res.status(404).json({
                 message: 'The authentication',
-                status: 'ERROR'
+                status: 'Error'
             })
         }
     });

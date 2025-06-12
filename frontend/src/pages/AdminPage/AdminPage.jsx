@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
 import {
   ProductOutlined,
-  UserOutlined
+  UserOutlined,
+  ProfileOutlined
 } from '@ant-design/icons';
 import HeaderComponent from "../../component/HeaderComponent/HeaderComponent";
 import AdminUser from "../../component/AdminUser/AdminUser";
 import AdminProduct from "../../component/AdminProduct/AdminProduct";
+import OrderAdmin from "../../component/OrderAdmin/OrderAdmin";
 
 const AdminPage = () => {
   const [openKeys, setOpenKeys] = useState(['user']);
@@ -31,6 +33,11 @@ const AdminPage = () => {
       key: 'product',
       icon: <ProductOutlined />,
       label: 'Product'
+    },
+    {
+      key: 'order',
+      icon: <ProfileOutlined />,
+      label: 'Order'
     }
   	]
 
@@ -45,6 +52,10 @@ const AdminPage = () => {
 			case 'product':
 				return (
 					<AdminProduct />
+				)
+      case 'order':
+				return (
+					<OrderAdmin />
 				)
 			default: 
 				return <></>

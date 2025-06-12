@@ -5,7 +5,7 @@ const createProduct = async (req, res) => {
         const {name, image, type, price, countInStock, rating, description, discount} = req.body
         if (!name || !image || !type || !price || !countInStock || !rating || !discount){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The input is required',
             });
         }
@@ -26,7 +26,7 @@ const updateProduct = async (req, res) => {
 
         if (!productId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The product ID is required'
             })
         }
@@ -44,7 +44,7 @@ const getDetailsProduct = async (req, res) => {
         const productId = req.params.id
         if (!productId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The product id is required'
             })
         }
@@ -62,7 +62,7 @@ const deleteProduct = async (req, res) => {
         const productId = req.params.id
         if (!productId){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The product ID is required'
             })
         }
@@ -80,7 +80,7 @@ const deleteMany = async (req, res) => {
         const ids = req.body.ids
         if (!ids){
             return res.status(200).json({
-                status: 'ERROR',
+                status: 'Error',
                 message: 'The ids is required'
             })
         }
