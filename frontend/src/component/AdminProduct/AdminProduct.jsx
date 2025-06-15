@@ -10,14 +10,15 @@ import { createProduct } from "../../services/ProductService";
 import * as ProductService from '../../services/ProductService';
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading1 from '../../component/LoadingComponent/Loading1';
-import * as message from "../../component/Message/Message";
 import { useQuery } from "@tanstack/react-query";
 import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import {useSelector} from 'react-redux';
 import ModalComponent from "../ModalComponent/ModalComponent";
 import Search from "antd/es/transfer/search";
+import { message, App } from 'antd';
 
 const AdminProduct = ()=> {
+    const [messageApi, contextHolder] = message.useMessage();
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [rowSelected, setRowSelected] = useState('')
     const [isOpenDrawer, setIsOpenDrawer] = useState(false)
@@ -423,6 +424,23 @@ const AdminProduct = ()=> {
     };
 
     const onFinish = () => {
+        const trimmedName = stateProduct.name?.trim().toLowerCase();
+
+        const isDuplicate = products?.data?.some(
+            (product) => product.name?.trim().toLowerCase() === trimmedName
+        );
+
+        if (isDuplicate) {
+            messageApi.error('Tên sản phẩm đã tồn tại!');
+            form.setFields([
+                {
+                    name: 'name',
+                    errors: ['Tên sản phẩm đã tồn tại'],
+                },
+            ]);
+            return;
+        }
+
         const params = {
             name: stateProduct.name,
             price: stateProduct.price,
@@ -432,13 +450,14 @@ const AdminProduct = ()=> {
             type: stateProduct.type === 'add_type' ? stateProduct.newType : stateProduct.type,
             countInStock: stateProduct.countInStock,
             discount: stateProduct.discount,
-        }
-        mutation.mutate(params , {
+        };
+
+        mutation.mutate(params, {
             onSettled: () => {
-                queryProduct.refetch()
-            }
-        })
-    }
+                queryProduct.refetch();
+            },
+        });
+    };
 
     const handleOnchange = (e) => {
         setStateProduct({
@@ -477,12 +496,35 @@ const AdminProduct = ()=> {
     }
 
     const onUpdateProduct = () => {
-        mutationUpdate.mutate({ id: rowSelected, token: user?.access_token, ...stateProductDetails }, {
-            onSettled: () => {
-                queryProduct.refetch()
+        const trimmedName = stateProductDetails.name?.trim().toLowerCase();
+
+        const isDuplicate = products?.data?.some(
+            (product) =>
+                product.name?.trim().toLowerCase() === trimmedName &&
+                product._id !== rowSelected // tránh trùng chính mình
+        );
+
+        if (isDuplicate) {
+            messageApi.error('Tên sản phẩm đã tồn tại!');
+            form.setFields([
+                {
+                    name: 'name',
+                    errors: ['Tên sản phẩm đã tồn tại'],
+                },
+            ]);
+            return;
+        }
+
+        mutationUpdate.mutate(
+            { id: rowSelected, token: user?.access_token, ...stateProductDetails },
+            {
+                onSettled: () => {
+                    queryProduct.refetch();
+                },
             }
-        })
-    }
+        );
+    };
+    
     const handleChangeSelect = (value) => {
         setStateProduct({
             ...stateProduct,
@@ -492,6 +534,7 @@ const AdminProduct = ()=> {
     
     return(
         <div>
+            {contextHolder}
             <WrapperHeader>Quản lý sản phẩm</WrapperHeader>
             <div style={{marginTop:'10px'}}>
                 <Button style={{
