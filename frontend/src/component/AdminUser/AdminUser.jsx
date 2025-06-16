@@ -274,14 +274,10 @@ const AdminUser = ()=> {
     {
         title: 'Phone',
         dataIndex: 'phone',
-        sorter: (a, b) => a.phone.length - b.phone.length,
-        ...getColumnSearchProps('phone')
     },
     {
         title: 'Address',
         dataIndex: 'address',
-        sorter: (a, b) => a.address.length - b.address.length,
-        ...getColumnSearchProps('address')
     },
     {
         title: 'isAdmin',
@@ -479,7 +475,7 @@ const AdminUser = ()=> {
                         <Form.Item
                             label="Avatar"
                             name="avatar"
-                            rules={[{ required: true, message: 'Please upload avatar of user!' }]}
+                            // rules={[{ required: true, message: 'Please upload avatar of user!' }]}
                         >
                             <WrapperUploadFile 
                                 onChange={handleOnchangeAvatarDetails}

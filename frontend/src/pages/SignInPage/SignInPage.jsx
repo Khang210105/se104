@@ -12,12 +12,13 @@ import * as UserService from '../../services/UserService';
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading1 from "../../component/LoadingComponent/Loading1";
 import ButtonSign from "../../component/ButtonSign/ButtonSign";
-import * as message from '../../component/Message/Message';
 import { jwtDecode } from 'jwt-decode';
 import { updateUser } from '../../redux/slides/userSlide';
 import { useDispatch } from 'react-redux';
+import { message } from 'antd';
 
 const SignInPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [isShowPassword, setIsShowPassword] = useState(false);
     const location = useLocation()
     const [email, setEmail] = useState('');
@@ -36,23 +37,30 @@ const SignInPage = () => {
     const { data, isLoading, isSuccess, isError } = mutation
 
     useEffect(() => {
-        if(isSuccess){
-            if (location?.state){
-                navigate(location?.state)
-            }
-            else {
-                navigate('/')
-            }
-            localStorage.setItem('access_token', JSON.stringify(data?.access_token))
-            if (data?.access_token) {
-                const decoded = jwtDecode(data?.access_token)
-                if (decoded?.id) {
-                    handleGetDetailsUser(decoded?.id, data?.access_token)
+        if (isSuccess) {
+            if (data?.status === 'OK') {
+                messageApi.success('Đăng nhập thành công 🎉');
+                localStorage.setItem('access_token', JSON.stringify(data?.access_token));
+                if (data?.access_token) {
+                    const decoded = jwtDecode(data?.access_token);
+                    if (decoded?.id) {
+                        handleGetDetailsUser(decoded?.id, data?.access_token);
+                    }
                 }
+                setTimeout(() => {
+                    if (location?.state) {
+                        navigate(location.state);
+                    } else {
+                        navigate('/');
+                    }
+                }, 1000);
+            }
+
+            if (data?.status === 'Error') {
+                messageApi.error(data?.message || 'Sai email hoặc mật khẩu!');
             }
         }
-            
-    }, [isSuccess])
+    }, [isSuccess, data]);
 
     const handleGetDetailsUser = async (id, token) => {
         const res = await UserService.getDetailsUser(id, token)
@@ -76,11 +84,22 @@ const SignInPage = () => {
 
     return(
         <div style={{display:'flex', alignItems:'center', justifyContent:'center',background:'rgba(0, 0, 0, 0.53)', height:'100vh'}}>
+            {contextHolder}
             <div style={{width:'800px', height:'445px', borderRadius:'6px', background:'#fff', display:'flex'}}>
                 <WrapperContainerLeft>
                     <h1 >Xin chào</h1>
                     <p style={{marginBottom:'10px', fontSize:'15px'}}>Đăng nhập hoặc Tạo tài khoản</p>
-                    <InputForm style={{marginBottom:'10px'}} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
+                    <InputForm 
+                        style={{marginBottom:'10px'}} 
+                        placeholder="abc@gmail.com" 
+                        value={email} 
+                        onChange={handleOnchangeEmail} 
+                        onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSignIn();
+                            }
+                        }}
+                    />
                     <div style={{position:'relative'}}>
                         <span
                             onClick={() => setIsShowPassword(!isShowPassword)}
@@ -102,7 +121,13 @@ const SignInPage = () => {
                         placeholder="password" 
                         type={isShowPassword ? 'text' : 'password'} 
                         value={password} 
-                        onChange={handleOnchangePassword} />
+                        onChange={handleOnchangePassword}
+                        onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSignIn();
+                            }
+                        }}
+                        />
                     </div>
                     {data?.status === 'ERROR' && <span style={{color:'red'}}>{data?.message}</span> }
                     <Loading1 isPending={mutation.isLoading}>

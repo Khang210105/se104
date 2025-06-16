@@ -10,10 +10,10 @@ import * as UserService from '../../services/UserService';
 import { useMutationHook } from "../../hooks/useMutationHook";
 import Loading from "../../component/LoadingComponent/Loading";
 import ButtonSign from '../../component/ButtonSign/ButtonSign';
-import * as message from '../../component/Message/Message';
-
+import { message } from 'antd';
 
 const SignUpPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false);
 
@@ -28,15 +28,16 @@ const SignUpPage = () => {
 
     const {data, isLoading, isSuccess, isError} = mutation
 
-    useEffect(()=>{
-        if(isSuccess){
-            message.success()
-            handleNavigateSignIn()
+    useEffect(() => {
+        if (isSuccess && data?.status === 'OK') {
+            messageApi.success("Tạo tài khoản thành công 🎉");
+            setTimeout(() => {
+                handleNavigateSignIn();
+            }, 1000); // chờ 1s rồi chuyển trang
+        } else if (data?.status === 'Error') {
+            messageApi.error(data?.message || "Đã có lỗi xảy ra. Vui lòng thử lại!");
         }
-        else if (isError){
-            message.error()
-        }
-    }, [isSuccess, isError])
+    }, [isSuccess, data]);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -61,6 +62,7 @@ const SignUpPage = () => {
 
     return(
         <div style={{display:'flex', alignItems:'center', justifyContent:'center',background:'rgba(0, 0, 0, 0.53)', height:'100vh'}}>
+            {contextHolder}
             <div style={{width:'800px', height:'445px', borderRadius:'6px', background:'#fff', display:'flex'}}>
                 <WrapperContainerLeft>
                     <h1>ĐĂNG KÝ TÀI KHOẢN</h1>
@@ -119,6 +121,11 @@ const SignUpPage = () => {
                         type={isShowConfirmPassword ? 'text' : 'password'}
                         value={confirmPassword} 
                         onChange={handleOnchangeConfirmPassword}
+                        onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            handleSignUp();
+                            }
+                        }}
                     />
                     </div>
                 {data?.status === 'ERROR' && <span style={{color:'red'}}>{data?.message}</span> }
