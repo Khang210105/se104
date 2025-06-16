@@ -30,6 +30,7 @@ const HeaderComponent = ({isHiddenSearch=false, isHiddenCart=false}) => {
         await UserService.logoutUser()
         dispatch(resetUser())
         setLoading(false)
+        navigate('/');
     }
 
     useEffect(() => {
