@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 import {orderContant} from '../../contant'
 
 const OrderAdmin = ()=> {
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const searchInput = useRef(null);
     const [searchText, setSearchText] = useState('');
 const [searchedColumn, setSearchedColumn] = useState('');
@@ -90,77 +91,81 @@ const [searchedColumn, setSearchedColumn] = useState('');
             }
         }
     });
-
+    
     const columns = [
-  {
-    title: 'Mã đơn hàng',
-    dataIndex: '_id',
-  },
-  {
-    title: 'Khách hàng',
-    dataIndex: 'userName',
-    ...getColumnSearchProps(['user', 'name']),
-  },
-  {
-    title: 'Số điện thoại',
-    dataIndex: 'phone',
-  },
-  {
-    title: 'Địa chỉ',
-    dataIndex: 'address',
-  },
-  {
-    title: 'Tổng tiền',
-    dataIndex: 'totalPrice',
-    render: (value) => `${value.toLocaleString()}₫`,
-    sorter: (a, b) => a.totalPrice - b.totalPrice,
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: 'isDelivered',
-    filters: [
-      { text: 'Đã giao', value: true },
-      { text: 'Chưa giao', value: false },
-    ],
-    render: (value) => (value ? 'Đã giao' : 'Chưa giao'),
-    onFilter: (value, record) => record.isDelivered === value,
-  },
-  {
-    title: 'Giao dịch',
-    dataIndex: 'isPaid',
-    filters: [
-      { text: 'Đã thanh toán', value: true },
-      { text: 'Chưa thanh toán', value: false },
-    ],
-    render: (value) => (value ? 'Đã thanh toán' : 'Chưa thanh toán'),
-    onFilter: (value, record) => record.isDelivered === value,
-  },
-  {
-    title: 'Phương thức thanh toán',
-    dataIndex: 'payment',
-  },
-  {
-    title: 'Ngày tạo',
-    dataIndex: 'createdAt',
-    render: (date) => new Date(date).toLocaleString(),
-    sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-  },
-];
+    {
+        title: 'Mã đơn hàng',
+        dataIndex: '_id',
+    },
+    {
+        title: 'Khách hàng',
+        dataIndex: 'userName',
+        ...getColumnSearchProps(['user', 'name']),
+    },
+    {
+        title: 'Số điện thoại',
+        dataIndex: 'phone',
+    },
+    {
+        title: 'Địa chỉ',
+        dataIndex: 'address',
+    },
+    {
+        title: 'Tổng tiền',
+        dataIndex: 'totalPrice',
+        render: (value) => `${value.toLocaleString()}₫`,
+        sorter: (a, b) => a.totalPrice - b.totalPrice,
+    },
+    {
+        title: 'Trạng thái',
+        dataIndex: 'isDelivered',
+        filters: [
+        { text: 'Đã giao', value: true },
+        { text: 'Chưa giao', value: false },
+        ],
+        render: (value) => (value ? 'Đã giao' : 'Chưa giao'),
+        onFilter: (value, record) => record.isDelivered === value,
+    },
+    {
+        title: 'Giao dịch',
+        dataIndex: 'isPaid',
+        filters: [
+        { text: 'Đã thanh toán', value: true },
+        { text: 'Chưa thanh toán', value: false },
+        ],
+        render: (value) => (value ? 'Đã thanh toán' : 'Chưa thanh toán'),
+        onFilter: (value, record) => record.isDelivered === value,
+    },
+    {
+        title: 'Phương thức thanh toán',
+        dataIndex: 'payment',
+    },
+    {
+        title: 'Ngày tạo',
+        dataIndex: 'createdAt',
+        render: (date) => new Date(date).toLocaleString(),
+        sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+    },
+    ];
 
     const dataTable = orders?.data?.length && orders?.data?.map((order) => {
+        console.log('Số điện thoại gốc:', order?.shippingAddress?.phone);
         return {
             ...order, 
             key: order._id, 
             userName: order?.shippingAddress?.fullName, 
             phone: order?.shippingAddress?.phone, 
             address: order?.shippingAddress?.address,
-            payment: orderContant.payment[order?.paymentMethod]
+            payment: orderContant.payment[order?.paymentMethod],
         }})
     
     return(
         <div>
             <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
             <div style={{marginTop:'20px'}}>
+                <div style={{ marginBottom: 16 }}>
+                
+                </div>
                 <TableComponent  columns={columns} isPending={isLoadingOrders} data={dataTable} />
             </div>
         </div>
