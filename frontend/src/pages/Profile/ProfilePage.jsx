@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as UserService from '../../services/UserService';
 import { useMutationHook } from "../../hooks/useMutationHook";
 import * as message from '../../component/Message/Message';
-import Loading from "../../component/LoadingComponent/Loading";
+import Loading1 from "../../component/LoadingComponent/Loading";
 import {updateUser} from '../../redux/slides/userSlide'
 import { Button, Upload } from "antd";
 import {UploadOutlined} from '@ant-design/icons';
@@ -84,7 +84,7 @@ const ProfilePage = () => {
     return(
         <div style={{width:'1270px', margin:'0 auto', height: '500px'}}>
             <WrapperHeader>Thông tin người dùng</WrapperHeader>
-            <Loading isPending={mutation.isPending}>
+            <Loading1 isPending={mutation.isPending}>
                 <WrapperContentProfile>
                 <WrapperInput>
                     <WrapperLabel htmlFor="name">Name</WrapperLabel>
@@ -189,7 +189,7 @@ const ProfilePage = () => {
                     </ButtonComponent>
                 </WrapperInput>
                 </WrapperContentProfile>
-            </Loading>
+            </Loading1>
         </div>
     )
 }

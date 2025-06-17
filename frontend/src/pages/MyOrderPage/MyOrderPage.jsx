@@ -16,7 +16,7 @@ const MyOrderPage = () => {
     const navigate = useNavigate()
     const fetchMyOrder = async () => {
         const res = await OrderService.getOrderByUserId(state?.id, state?.token)
-        //console.log('state', res);
+        console.log('res', res);
         return res?.data
     }
 
@@ -99,8 +99,8 @@ const MyOrderPage = () => {
                 <div style={{ width: '1270px', height: '100vh', margin:'0 auto' }}>
                     <h4>Đơn hàng của tôi</h4>
                     <WrapperListOrder>
-                        {data?.map((order)=>{
-                            console.log('order', order);
+                        {Array.isArray(data) && data?.map((order)=>{
+                            console.log('data', data);
                             return(
                                 <WrapperItemOrder key={order?._id}>
                                     <WrapperStatus>

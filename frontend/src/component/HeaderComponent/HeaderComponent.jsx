@@ -122,8 +122,15 @@ const HeaderComponent = ({isHiddenSearch=false, isHiddenCart=false}) => {
                         
                         {user?.access_token? (
                             <>
-                                <Popover content={content} trigger="click" open={isOpenPopup} >
-                                    <div style={{cursor:'pointer'}} onClick={() => setIsOpenPopup((prev) => !prev)} > { userName?.length ? userName : user?.email } </div>
+                                <Popover
+                                content={content}
+                                trigger="click"
+                                open={isOpenPopup}
+                                onOpenChange={(visible) => setIsOpenPopup(visible)} // 👈 xử lý khi click bên ngoài
+                                >
+                                <div style={{cursor:'pointer'}}>
+                                    {userName?.length ? userName : user?.email}
+                                </div>
                                 </Popover>
                             </>
                         ) : (
