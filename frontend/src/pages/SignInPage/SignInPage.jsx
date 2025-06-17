@@ -87,8 +87,21 @@ const SignInPage = () => {
             {contextHolder}
             <div style={{width:'800px', height:'445px', borderRadius:'6px', background:'#fff', display:'flex'}}>
                 <WrapperContainerLeft>
-                    <h1 >Xin chào</h1>
-                    <p style={{marginBottom:'10px', fontSize:'15px'}}>Đăng nhập hoặc Tạo tài khoản</p>
+                    <h1 style={{
+                        fontSize: '28px',
+                        fontWeight: 'bold',
+                        marginBottom: '8px',
+                        color: '#333'
+                    }}>
+                    👋 Xin chào
+                    </h1>
+                    <p style={{
+                        fontSize: '15px',
+                        color: '#888',
+                        marginBottom: '16px'
+                    }}>
+                    Đăng nhập hoặc Tạo tài khoản
+                    </p>
                     <InputForm 
                         style={{marginBottom:'10px'}} 
                         placeholder="abc@gmail.com" 
@@ -147,13 +160,31 @@ const SignInPage = () => {
                             styleTextButton={{color: '#fff', fontSize: '15px', fontWeight: '700'}}>
                         </ButtonSign>
                     </Loading1>
-                    <p> <WrapperTextLight>  Quên mật khẩu ? </WrapperTextLight></p>
+                    {/* <p> <WrapperTextLight>  Quên mật khẩu ? </WrapperTextLight></p> */}
                     <p style={{fontSize:'13px'}}> Bạn chưa có tài khoản ? <WrapperTextLight onClick={handleNavigateSignUp } style={{cursor:'pointer'}}> Tạo tài khoản </WrapperTextLight> </p> 
                     </WrapperContainerLeft>
 
                     <WrapperContainerRight>
                         <Image src={imageLogo} preview={false} alt='image-logo' height='203px' width='243px' style={{borderRadius:'100px'}} />
-                        <h4>Mua sắm tại Haky</h4>
+                        <h4 style={{
+                        fontSize: '18px',
+                        fontWeight: '600',
+                        color: '#ff4d4f',
+                        animation: 'pulse 1.2s infinite',
+                        marginBottom: '16px',
+                        }}>
+                        🛒 Mua sắm thôi nào !!!
+                        </h4>
+
+                        <style>
+                        {`
+                        @keyframes pulse {
+                        0% { transform: scale(1); opacity: 1; }
+                        50% { transform: scale(1.05); opacity: 0.85; }
+                        100% { transform: scale(1); opacity: 1; }
+                        }
+                        `}
+                        </style>
                     </WrapperContainerRight>
             </div>
         </div>

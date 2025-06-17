@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import {Row, Col, Image, Rate} from 'antd';
-import {WrapperStyleImageSmall, WrapperStyleColImage, WrapperStyleNameProduct, WrapperStyleTextSell, WrapperPriceProduct} from './style';
-import imagesmall from '../../assets/images/cpu_ultra9.webp';
-import { PlusOutlined, MinusOutlined} from '@ant-design/icons';
-import {WrapperPriceText, WrapperAddressProduct, WrapperQualityProduct, WrapperInputNumber,WrapperBtnQualityProduct} from './style';
+import { WrapperStyleNameProduct, WrapperStyleTextSell} from './style';
+import { PlusOutlined, MinusOutlined, ShoppingCartOutlined, CheckCircleOutlined} from '@ant-design/icons';
+import {WrapperQualityProduct, WrapperInputNumber} from './style';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import * as ProductService from '../../services/ProductService';
 import { useQuery } from "@tanstack/react-query";
@@ -63,56 +62,69 @@ const ProductDetailsComponent = ({idProduct}) => {
         enabled: !!idProduct,
     });
 
+    // useEffect(() => {
+    //     if (productDetails) {
+    //         console.log('productDetails', productDetails);
+    //     }
+    // }, [productDetails]);
+
     return(
         <Loading1 isPending={isPending}>
             <Row style={{padding:'16px', background:'#fff', borderRadius:'4px'}}>
                 <Col span={10} style={{borderRight:'1px solid #e5e5e5', paddingRight:'8px'}}>
                     <Image src={productDetails?.image} alt='image-product' preview={false} />
-                    <Row style={{paddingTop:'10px', justifyContent:'space-between'}}>
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-
-                        <WrapperStyleColImage span={4}>
-                            <WrapperStyleImageSmall src={imagesmall} alt='image' preview={false} />
-                        </WrapperStyleColImage>
-                        
-                    </Row>
                 </Col>
                 <Col span={14} style={{paddingLeft:'10px'}}>
                     <WrapperStyleNameProduct> {productDetails?.name} </WrapperStyleNameProduct>
-                    <div>
-                        <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
-                        <WrapperStyleTextSell> | Đã bán 1000+</WrapperStyleTextSell>
+                    
+                    <div style={{ marginTop: 12 }}>
+    <Rate allowHalf defaultValue={productDetails?.rating} value={productDetails?.rating} />
+    <WrapperStyleTextSell />
+                <div style={{ 
+                    background: '#f5f5f5', 
+                    borderRadius: 8, 
+                    padding: '8px 12px', 
+                    margin: '8px 0', 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    gap: 8,
+                    fontSize: 14,
+                    color: '#333' 
+                }}>
+                    <ShoppingCartOutlined style={{ color: '#1890ff' }} />
+                    Đã bán: {productDetails?.selled}
+                </div>
+                
+                <div style={{ 
+                    background: '#f5f5f5', 
+                    borderRadius: 8, 
+                    padding: '8px 12px', 
+                    margin: '8px 0', 
+                    display: 'flex', 
+                    alignItems: 'center',
+                    gap: 8,
+                    fontSize: 14,
+                    color: '#333' 
+                }}>
+                    <CheckCircleOutlined style={{ color: '#52c41a' }} />
+                    Tình trạng: {productDetails?.description}
+                </div>
+            </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
+                        <span style={{ fontSize: 16, color: '#555' }}>Giá niêm yết:</span>
+                        <span style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: '#ff4d4f',
+                            backgroundColor: '#fff1f0',
+                            padding: '4px 8px',
+                            borderRadius: 6,
+                        }}>
+                            {convertPrice(productDetails?.price)}
+                        </span>
                     </div>
-                    <WrapperPriceProduct>
-                        <WrapperPriceText> {convertPrice(productDetails?.price)} </WrapperPriceText>
-                    </WrapperPriceProduct>
-
-                    <WrapperAddressProduct>
-                        <span>Giao đến </span>
-                        <span className='address'> {user?.address} </span> - 
-                        <span className='change-address'>Đổi địa chỉ</span>
-                    </WrapperAddressProduct>
-
                     <div style={{margin:'10px 0 20px', padding:'10px 0' , borderTop:'1px solid #e5e5e5', borderBottom:'1px solid #e5e5e5'}}>
-                        <div style={{marginBottom:'10px'}}>Số lượng</div>
+                        <div style={{marginBottom:'10px', fontSize:'16px'}}>Số lượng</div>
                         <WrapperQualityProduct>
                             <button style={{border:'none', background: 'transparent', cursor: 'pointer'}} onClick={() => handleChangeCount('decrease')} >
                                 <MinusOutlined style= {{color: '#000', fontSize:'20px'}} />
@@ -135,21 +147,7 @@ const ProductDetailsComponent = ({idProduct}) => {
                             }}
                             onClick={handleAddOrderProduct}
                             textButton={'Chọn mua'}
-                            styleTextButton={{color: '#fff', fontSize: '15px', fontWeight: '700'}}>
-                        </ButtonComponent>
-
-                        <ButtonComponent
-                            
-                            size={40}
-                            styleButton = {{
-                                backgroundColor: '#fff',
-                                height:'48px',
-                                width: '220px',
-                                border: '1px solid rgb(13, 92, 182)',
-                                borderRadius: '4px',
-                            }}
-                            textButton={'Mua trước trả sau'}
-                            styleTextButton={{color: 'rgb(13, 92, 182)', fontSize: '15px'}}>
+                            styleTextButton={{color: '#fff', fontSize: '16px', fontWeight: '700'}}>
                         </ButtonComponent>
                     </div>
                 </Col>

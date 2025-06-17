@@ -92,7 +92,7 @@ const HeaderComponent = ({isHiddenSearch=false, isHiddenCart=false}) => {
     }
 
     return(
-        <div style={{width:'100%', background:'rgb(26, 148, 255', display:'flex', justifyContent:'center',}}>
+        <div style={{width:'100%', background:'rgb(26, 148, 255)', display:'flex', justifyContent:'center',}}>
             <WrapperHeader style={{justifyContent: isHiddenSearch && isHiddenSearch ? 'space-between' : 'unset'}}>
                 <Col span={5}>
                     <WrapperTextHeader style={{cursor:'pointer'}} onClick={() => handleReturnHome()}> E-Commerce </WrapperTextHeader>
@@ -101,8 +101,7 @@ const HeaderComponent = ({isHiddenSearch=false, isHiddenCart=false}) => {
                     <Col span={13}>
                     <ButtonInputSearch
                         size='large'
-                        textButton='Tìm kiếm'
-                        placeholder="input search text" 
+                        placeholder="Tìm kiếm..." 
                         onChange={onSearch} 
                     />
                     </Col>

@@ -23,7 +23,7 @@ const ProfilePage = () => {
     const mutation = useMutationHook(
         async (data) => {
             const {id, access_token, ...rests} = data
-            const response = await UserService.updateUser(id, rests, access_token)
+            const response = await UserService.updateUser(id, access_token, rests)
             return response
         }
     )
@@ -49,7 +49,7 @@ const ProfilePage = () => {
     }, [isSuccess, isError])
 
     const handleGetDetailsUser = async (id, token) => {
-        const res = await UserService.updateUser(id, token)
+        const res = await UserService.getDetailsUser(id, token)
         dispatch(updateUser({...res?.data, access_token: token}))
     }
     
@@ -95,7 +95,7 @@ const ProfilePage = () => {
                         styleButton = {{
                             height:'30px',
                             width: 'fit-content',
-                            //border: '1px solid rgb(26, 148, 255)',
+                            border: '1px solid rgb(26, 148, 255)',
                             borderRadius: '4px',
                             padding:'2px 6px 6px'
                         }}
@@ -113,7 +113,7 @@ const ProfilePage = () => {
                         styleButton = {{
                             height:'30px',
                             width: 'fit-content',
-                            //border: '1px solid rgb(26, 148, 255)',
+                            border: '1px solid rgb(26, 148, 255)',
                             borderRadius: '4px',
                             padding:'2px 6px 6px'
                         }}
@@ -131,7 +131,7 @@ const ProfilePage = () => {
                         styleButton = {{
                             height:'30px',
                             width: 'fit-content',
-                            //border: '1px solid rgb(26, 148, 255)',
+                            border: '1px solid rgb(26, 148, 255)',
                             borderRadius: '4px',
                             padding:'2px 6px 6px'
                         }}
@@ -149,7 +149,7 @@ const ProfilePage = () => {
                         styleButton = {{
                             height:'30px',
                             width: 'fit-content',
-                            //border: '1px solid rgb(26, 148, 255)',
+                            border: '1px solid rgb(26, 148, 255)',
                             borderRadius: '4px',
                             padding:'2px 6px 6px'
                         }}
@@ -174,14 +174,13 @@ const ProfilePage = () => {
                             objectFit:'cover'
                         }} alt='avatar' />
                     )}
-                    {/* <InputForm style={{width: '300px'}} id="avatar" value={avatar} onChange={handleOnchangeAvatar} /> */}
                     <ButtonComponent
                         onClick={handleUpdate}
                         size={40}
                         styleButton = {{
                             height:'30px',
                             width: 'fit-content',
-                            //border: '1px solid rgb(26, 148, 255)',
+                            border: '1px solid rgb(26, 148, 255)',
                             borderRadius: '4px',
                             padding:'2px 6px 6px'
                         }}

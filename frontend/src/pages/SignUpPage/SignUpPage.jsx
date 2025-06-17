@@ -65,7 +65,19 @@ const SignUpPage = () => {
             {contextHolder}
             <div style={{width:'800px', height:'445px', borderRadius:'6px', background:'#fff', display:'flex'}}>
                 <WrapperContainerLeft>
-                    <h1>ĐĂNG KÝ TÀI KHOẢN</h1>
+                    <h1 style={{
+                        fontSize: '26px',
+                        fontWeight: '600',
+                        color: '#222',
+                        borderBottom: '2px solid #ff4d4f',
+                        paddingBottom: '8px',
+                        textAlign: 'left',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                    }}>
+                    <span role="img" aria-label="user">📝</span> ĐĂNG KÝ TÀI KHOẢN
+                    </h1>
                     
                     <InputForm 
                         style={{marginBottom:'10px'}} 
@@ -151,7 +163,25 @@ const SignUpPage = () => {
 
                 <WrapperContainerRight>
                     <Image src={imageLogo} preview={false} alt='image-logo' height='203px' width='243px' style={{borderRadius:'100px'}} />
-                    <h4 style={{marginTop:'30px', fontSize:'20px'}}>Mua sắm tại Haky</h4>
+                    <h4 style={{
+                    fontSize: '18px',
+                    fontWeight: '600',
+                    color: '#ff4d4f',
+                    animation: 'pulse 1.2s infinite',
+                    marginBottom: '16px',
+                    }}>
+                    🛒 Mua sắm thôi nào !!!
+                    </h4>
+
+                    <style>
+                    {`
+                    @keyframes pulse {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.05); opacity: 0.85; }
+                    100% { transform: scale(1); opacity: 1; }
+                    }
+                    `}
+                    </style>
                 </WrapperContainerRight>
             </div>
         </div>
