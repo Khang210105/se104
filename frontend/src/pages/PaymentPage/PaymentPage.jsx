@@ -264,10 +264,6 @@ const PaymentPage = () => {
                                         <span style={{fontSize:'14px',marginTop:'5px'}}>Giảm giá</span>
                                         <span style={{color:'#000', fontSize:'14px', fontWeight:'bold'}}>- {convertPrice(priceDiscountMemo)} </span>
                                     </div>
-                                    {/* <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                                        <span>Thuế</span>
-                                        <span style={{color:'#000', fontSize:'14px', fontWeight:'bold'}}></span>
-                                    </div> */}
                                     <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                                         <span style={{fontSize:'14px',marginTop:'5px'}}>Phí giao hàng</span>
                                         <span style={{color:'#000', fontSize:'14px', fontWeight:'bold'}}> {convertPrice(priceShipMemo)} </span>
